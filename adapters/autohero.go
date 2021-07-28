@@ -133,7 +133,7 @@ func getBrandModel(link string)(string,[]string){
 
 	if len(sarr)<6{return "",nil}
 
-	bm := strings.Split(sarr[5],"-")
+	bm := strings.Split(sarr[4],"-")
 
 	bi := 0
 
