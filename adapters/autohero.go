@@ -11,9 +11,16 @@ const (
 	url = "https://www.autohero.com/"
 )
 
-var fType = map[string]string{
-	"Benzyna":"petrol",
-	"Diesel": "diesel",
+var fType = map[string]FuelType{
+	"Benzyna": Petrol,
+	"Diesel": Diesel,
+}
+
+var tType = map[string]TransmissionType{
+	"Automatyczna": Automatic,
+	"Manualna": Manual,
+	"Pół-automatyczna": SemiAutomatic,
+	"Dwusprzęgłowa skrzynia biegów": TwinClutch,
 }
 
 func AutoheroGetter() []CarArray{
@@ -82,6 +89,9 @@ func AutoheroGetter() []CarArray{
 			EngineType: enginet,
 			Year: year,
 			FuelType: fType[details[1]],
+			// must be changed to int
+			Mileage: details[2],
+			Transmission: tType[details[3]],
 
 		}
 		ca.Print()
@@ -259,7 +269,6 @@ func getDetails(div string)[]string{
 		div = div[ix:]
 
 		sx:=strings.Index(div,"</li>")
-		log.Println(div[:sx])
 		toret = append(toret,div[:sx])
 		div = div[sx:]
 	}

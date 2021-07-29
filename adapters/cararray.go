@@ -11,22 +11,24 @@ const (
 	Diesel
 )
 
-type DriveType int
+var ftStringEN = map[FuelType]string{
+	Petrol: "Petrol",
+	Diesel: "Diesel",
+}
+
+type TransmissionType int
 const (
-	Manual DriveType = iota
-	Automat
+	Manual TransmissionType = iota
+	Automatic
 	TwinClutch
-
+	SemiAutomatic
 )
-
-// var FuelType = map[string]string{
-// 	"Benzyna":"petrol",
-// 	"Diesel": "diesel",
-// }
-// var DriveType = map[string]string{
-// 	"Benzyna":"petrol",
-// 	"Diesel": "diesel",
-// }
+var ttString = map[TransmissionType]string {
+	Manual: "Manual",
+	Automatic: "Automatic",
+	TwinClutch: "Twin clutch",
+	SemiAutomatic: "Semi-automatic",
+}
 
 type CarArray struct{
 	Brand 		string
@@ -37,8 +39,8 @@ type CarArray struct{
 	Image 		string
 	EngineSize 	string	// size in dl
 	EngineType	string	// some fancy additional info about engine
-	Drive		string  
-	FuelType 	string	// diesel/petrol/LPG
+	Transmission	TransmissionType  
+	FuelType 	FuelType	// diesel/petrol/LPG
 	Power 		string	// in HP
 	Mileage 	string	// in km
 	Price		float32
@@ -51,8 +53,10 @@ func (ca CarArray)Print(){
 	fmt.Println("model: ",ca.Model)
 	fmt.Println("engine size:",ca.EngineSize)
 	fmt.Println("engine tyoe:",ca.EngineType)
-	fmt.Println("fuel:",ca.FuelType)
+	fmt.Println("transmission: ",ttString[ca.Transmission])
+	fmt.Println("fuel:",ftStringEN[ca.FuelType])
 	fmt.Println("year: ",ca.Year)
+	fmt.Println("mileage:",ca.Mileage)
 	fmt.Println("price: ", ca.Price)
 	fmt.Println("found via: ",ca.Source)
 	fmt.Println("link: ",ca.Link)
