@@ -7,7 +7,14 @@ import (
 	"strings"
 	"strconv"
 )
-var url = "https://www.autohero.com/"
+const (
+	url = "https://www.autohero.com/"
+)
+
+var fType = map[string]string{
+	"Benzyna":"petrol",
+	"Diesel": "diesel",
+}
 
 func AutoheroGetter() []CarArray{
 	// build query
@@ -44,15 +51,25 @@ func AutoheroGetter() []CarArray{
 
 	cars := make([]CarArray,0)
 
+	// for all divs we received we grab data (each div is one car)
+
 	for _,div:=range divs{
 		link := getLink(div)
 		brand,model := getBrandModel(link)
-		image := getImage(div)
-		price := getPrice(div)
 
+		// if link is malformed, do not contain the car's name, there is no reason to make the rest of the process
 		if brand == ""{
 			continue
 		}
+
+		// not working yet
+		image := getImage(div)
+
+		price := getPrice(div)
+		engines,enginet := getEngine(div)
+
+		details := getDetails(div)
+		year,_:= strconv.Atoi(details[0])
 
 		ca := CarArray{
 			Link:link,
@@ -61,6 +78,11 @@ func AutoheroGetter() []CarArray{
 			Model: model,
 			Image: image,
 			Price: price,
+			EngineSize: engines,
+			EngineType: enginet,
+			Year: year,
+			FuelType: fType[details[1]],
+
 		}
 		ca.Print()
 		cars = append(cars,ca)
@@ -193,4 +215,54 @@ func getPrice(div string)float32{
 	if err != nil { return -1. }
 
 	return float32(price)
+}
+
+func getEngine(div string)(string,string){
+	ix := strings.Index(div,`<h3 class="subtitle___`)
+	div = div[ix+1:]
+
+	ix = strings.Index(div,">")
+	div = div[ix+1:]
+
+	ix = strings.Index(div,"<")
+	div = div[:ix]
+
+	esize:=""
+
+	for _,v := range div{
+		if v>='0' && v<='9' || v=='.'{
+			esize+=string(v)
+		}else{
+			break
+		}
+	}
+
+	return esize,div[len(esize):]
+}
+
+func getDetails(div string)[]string{
+	ix := strings.Index(div,`spec-list`)
+
+	div = div[ix:]
+	ix = strings.Index(div,">")
+	div = div[ix+1:]
+
+	ix = strings.Index(div,"</ul>")
+	div = div[:ix]
+
+
+	toret := make([]string,0)
+	for len(div)>4{
+		ix = strings.Index(div,"-->")+3
+		if ix<3{break}
+
+		div = div[ix:]
+
+		sx:=strings.Index(div,"</li>")
+		log.Println(div[:sx])
+		toret = append(toret,div[:sx])
+		div = div[sx:]
+	}
+
+	return toret
 }
