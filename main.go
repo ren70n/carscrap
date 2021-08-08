@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"github.com/ren70n/carscrap/adapters"
+	"github.com/ren70n/carscrap/adapters/autohero"
 )
 
 // I have to get the list of web services with used cars
@@ -14,6 +14,6 @@ import (
 func main(){
 	// first version is just to scrap autohero.pl
 	log.Println("main is running")
-	adapters.AutoheroGetter()
+	autohero.AutoheroGetter()
 }
 
