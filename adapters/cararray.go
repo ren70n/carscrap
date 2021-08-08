@@ -9,11 +9,15 @@ type FuelType int
 const (
 	Petrol FuelType = iota
 	Diesel
+	Electric
+	Hybrid
 )
 
 var ftStringEN = map[FuelType]string{
 	Petrol: "Petrol",
 	Diesel: "Diesel",
+	Electric: "Electric",
+	Hybrid:	"Hybrid",
 }
 
 type TransmissionType int
@@ -45,10 +49,14 @@ type CarArray struct{
 	Mileage 	string	// in km
 	Price		float32
 	Currency	helpers.Currency
+	Available	bool
 }
 
 func (ca CarArray)Print(){
 	fmt.Println("=======================")
+	if !ca.Available{
+		fmt.Println("- NOT Available -")	
+	}
 	fmt.Println("manufacturer: ",ca.Brand)
 	fmt.Println("model: ",ca.Model)
 	fmt.Println("engine size:",ca.EngineSize)
